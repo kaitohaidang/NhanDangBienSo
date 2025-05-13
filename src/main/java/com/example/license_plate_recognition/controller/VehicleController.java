@@ -1,9 +1,5 @@
 package com.example.license_plate_recognition.controller;
 
-
-
-import com.example.license_plate_recognition.dto.VehicleDto;
-
 import com.example.license_plate_recognition.model.Vehicle;
 import com.example.license_plate_recognition.service.VehicleService;
 import org.springframework.http.HttpStatus;
@@ -59,9 +55,9 @@ public class VehicleController {
      * Thêm xe mới
      */
     @PostMapping
-    public ResponseEntity<?> addVehicle(@RequestBody VehicleDto vehicleDto, @RequestParam Long userId) {
+    public ResponseEntity<?> addVehicle(@RequestBody Vehicle vehicle, @RequestParam Long userId) {
         try {
-            Vehicle savedVehicle = vehicleService.addVehicle(vehicleDto, userId);
+            Vehicle savedVehicle = vehicleService.addVehicle(vehicle, userId);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedVehicle);
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -74,9 +70,9 @@ public class VehicleController {
      * Cập nhật thông tin xe
      */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateVehicle(@PathVariable Long id, @RequestBody VehicleDto vehicleDto) {
+    public ResponseEntity<?> updateVehicle(@PathVariable Long id, @RequestBody Vehicle vehicle) {
         try {
-            Vehicle updatedVehicle = vehicleService.updateVehicle(id, vehicleDto);
+            Vehicle updatedVehicle = vehicleService.updateVehicle(id, vehicle);
             return ResponseEntity.ok(updatedVehicle);
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();

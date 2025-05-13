@@ -1,8 +1,5 @@
 package com.example.license_plate_recognition.controller;
 
-
-
-import com.example.license_plate_recognition.dto.LoginRequest;
 import com.example.license_plate_recognition.model.User;
 import com.example.license_plate_recognition.service.AuthService;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +22,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody User loginUser) {
         try {
-            User user = authService.login(request.getUsername(), request.getPassword());
+            User user = authService.login(loginUser.getUsername(), loginUser.getPassword());
             
             Map<String, Object> response = new HashMap<>();
             response.put("id", user.getId());

@@ -1,8 +1,5 @@
 package com.example.license_plate_recognition.service;
 
-
-
-import com.example.license_plate_recognition.dto.VehicleDto;
 import com.example.license_plate_recognition.model.User;
 import com.example.license_plate_recognition.model.UserVehicle;
 import com.example.license_plate_recognition.model.Vehicle;
@@ -61,22 +58,15 @@ public class VehicleService {
      * Thêm xe mới và liên kết với người dùng
      */
     @Transactional
-    public Vehicle addVehicle(VehicleDto vehicleDto, Long userId) {
+    public Vehicle addVehicle(Vehicle vehicle, Long userId) {
         // Kiểm tra biển số xe đã tồn tại chưa
-        if (existsByLicensePlate(vehicleDto.getLicensePlate())) {
+        if (existsByLicensePlate(vehicle.getLicensePlate())) {
             throw new RuntimeException("Biển số xe đã tồn tại");
         }
 
         // Lấy thông tin người dùng
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
-
-        // Tạo xe mới
-        Vehicle vehicle = new Vehicle();
-        vehicle.setLicensePlate(vehicleDto.getLicensePlate());
-        vehicle.setOwnerName(vehicleDto.getOwnerName());
-        vehicle.setVehicleType(vehicleDto.getVehicleType());
-        vehicle.setRegistrationDate(vehicleDto.getRegistrationDate());
 
         // Lưu xe vào database
         Vehicle savedVehicle = vehicleRepository.save(vehicle);
@@ -94,22 +84,22 @@ public class VehicleService {
      * Cập nhật thông tin xe
      */
     @Transactional
-    public Vehicle updateVehicle(Long id, VehicleDto vehicleDto) {
+    public Vehicle updateVehicle(Long id, Vehicle vehicleDetails) {
         // Kiểm tra xe tồn tại
         Vehicle vehicle = vehicleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy xe"));
 
         // Kiểm tra biển số xe mới có trùng với xe khác không
-        if (!vehicle.getLicensePlate().equals(vehicleDto.getLicensePlate()) && 
-            existsByLicensePlate(vehicleDto.getLicensePlate())) {
+        if (!vehicle.getLicensePlate().equals(vehicleDetails.getLicensePlate()) && 
+            existsByLicensePlate(vehicleDetails.getLicensePlate())) {
             throw new RuntimeException("Biển số xe mới đã tồn tại");
         }
 
         // Cập nhật thông tin xe
-        vehicle.setLicensePlate(vehicleDto.getLicensePlate());
-        vehicle.setOwnerName(vehicleDto.getOwnerName());
-        vehicle.setVehicleType(vehicleDto.getVehicleType());
-        vehicle.setRegistrationDate(vehicleDto.getRegistrationDate());
+        vehicle.setLicensePlate(vehicleDetails.getLicensePlate());
+        vehicle.setOwnerName(vehicleDetails.getOwnerName());
+        vehicle.setVehicleType(vehicleDetails.getVehicleType());
+        vehicle.setRegistrationDate(vehicleDetails.getRegistrationDate());
 
         return vehicleRepository.save(vehicle);
     }
